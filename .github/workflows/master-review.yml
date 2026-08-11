@@ -29,7 +29,9 @@ jobs:
           python-version: '3.12'
           
       - name: Install Dependencies
-        run: pip install google-antigravity requests
+        # google-antigravity is alpha and ships weekly 0.1.x releases; pin it so
+        # an upstream API change cannot break every consumer's PR review overnight.
+        run: pip install "google-antigravity==0.1.10" "requests>=2.31"
         
       - name: Run Review Agent
         env:
