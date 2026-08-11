@@ -1,0 +1,37 @@
+name: Master Antigravity PR Review
+on:
+  workflow_call:
+    secrets:
+      GEMINI_API_KEY:
+        required: true
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Caller Repository
+        uses: actions/checkout@v4
+        with:
+          path: caller-repo
+      
+      - name: Checkout Central CI Repository
+        uses: actions/checkout@v4
+        with:
+          repository: ahvega/central-ci
+          path: central-ci
+          
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          
+      - name: Install Dependencies
+        run: pip install google-antigravity requests
+        
+      - name: Run Review Agent
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          STYLE_GUIDE_PATH: central-ci/docs/style_guide.md 
+        run: python central-ci/scripts/review_pr.py
+        
