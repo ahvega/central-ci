@@ -70,3 +70,34 @@ def main():
     If the code looks perfect and follows all guidelines, simply reply: "LGTM! (Looks Good To Me) No issues found."
     
     Here is the diff:
+
+    diff
+    {pr_diff}
+    
+"""
+
+print("Analyzing code...")
+review_result = agent.run(review_prompt)
+
+print("Posting review comment to GitHub...")
+comment_url = f"https://api.github.com/repos/{repo}/issues/{pr_number}/comments"
+
+comment_payload = {
+    "body": f"### Antigravity Automated Review\n\n{review_result.text}"
+}
+
+post_headers = {
+    "Authorization": f"Bearer {github_token}",
+    "Accept": "application/vnd.github.v3+json"
+}
+
+post_response = requests.post(comment_url, headers=post_headers, json=comment_payload)
+
+if post_response.status_code == 201:
+    print("Successfully posted review comment!")
+else:
+    print(f"Failed to post comment: {post_response.status_code} {post_response.text}")
+    sys.exit(1)
+
+if __name__ == "__main__":
+    main()
