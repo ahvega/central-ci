@@ -13,18 +13,18 @@ jobs:
       pull-requests: write
     steps:
       - name: Checkout Caller Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: caller-repo
       
       - name: Checkout Central CI Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: ahvega/central-ci
           path: central-ci
           
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
           
